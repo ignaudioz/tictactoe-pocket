@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "346201502348",
+    "project_id": "tic-tac-toe-pocket",
+    "storage_bucket": "tic-tac-toe-pocket.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346201502348:android:329a94bf4ba089b44c81a9",
+        "android_client_info": {
+          "package_name": "com.audioz.tictactoe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346201502348-8pgiajh6mop93l78gq30tm12s35r221g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.audioz.tictactoe",
+            "certificate_hash": "f9927186e1366645844b4b9b63cbf79520630c71"
+          }
+        },
+        {
+          "client_id": "346201502348-eoc3ml494dot56kggk3f97itou6j2j0s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbj_5BRT5e3FodY5ydJk6Fak29-iSuzkg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346201502348-eoc3ml494dot56kggk3f97itou6j2j0s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

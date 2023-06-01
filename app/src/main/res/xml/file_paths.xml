@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<filePaths xmlns:android="http://schemas.android.com/apk/res/android">
+   <!--Media path permissions.-->
+    <file-path
+        name="camera_photos"
+        path="."/>
+
+</filePaths>
