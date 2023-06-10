@@ -148,7 +148,7 @@ public class Room extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(snapshot.hasChild("player2")) {
-                        guest = snapshot.child("player2").getValue(String.class); // Getting guest's player-name.
+                        guest = snapshot.child("player2/name").getValue(String.class); // Getting guest's player-name.
                         // Settings player turns name so it won't be blank.
                         String[] names = {roomName, guest};
 //                        playerturn.setText(names[0] + "'s Turn");

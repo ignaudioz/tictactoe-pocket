@@ -92,7 +92,7 @@ public class RoomSelector extends AppCompatActivity {
             roomName = username;
             mRoom = dataBase.getReference("Rooms/" + roomName + "/players/player1"); // Adding under Rooms an object that is named player1 because we are the host.
             createRoomEventListener();
-            mRoom.setValue(username); // setting player1's value to username for convenient.
+            mRoom.child("name").setValue(username); // setting player1's value to username for convenient.
             mRoom.child("pfp").setValue(pfp);
         });
 
@@ -118,7 +118,7 @@ public class RoomSelector extends AppCompatActivity {
                             Toast.makeText(RoomSelector.this, "The room is already full!",Toast.LENGTH_SHORT).show();
                         }else{
                             createRoomEventListener();
-                            mRoom.setValue(username); // setting player2's value to username for convenient.
+                            mRoom.child("name").setValue(username); // setting player2's value to username for convenient.
                             mRoom.child("pfp").setValue(pfp);
                         }
                     }
