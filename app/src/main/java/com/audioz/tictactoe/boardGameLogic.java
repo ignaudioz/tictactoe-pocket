@@ -13,7 +13,8 @@ public class boardGameLogic {
    private TextView currentPlayer;
    private ImageView imageturn;
    private String[] playerNames= {"",""};
-    private int player = 1; // '1' for X, '2' for O.
+    private int player = 1;
+    // '1' for X, '2' for O.
     // 1st element = row, 2nd element = column, 3nd element = line winning type.
     // if 3nd element equals 1 then Winning type is Horizontal, if 2 then Vertical, if 3 Negative Diagonal, if 4 Positive Diagonal.
     // Default value[{-1,-1,-1}] means tie.

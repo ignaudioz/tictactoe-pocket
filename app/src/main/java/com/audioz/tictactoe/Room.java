@@ -144,7 +144,7 @@ public class Room extends AppCompatActivity {
                     });
 
 
-            mRoom.addValueEventListener(lRoom = new ValueEventListener() {
+            mRoom.addListenerForSingleValueEvent(lRoom = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(snapshot.hasChild("player2")) {

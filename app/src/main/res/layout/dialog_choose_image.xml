@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Theme.Transparent.ImagePicker"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:baselineAligned="false"
     android:orientation="horizontal"
-    android:padding="16dp"
-    style="@style/Theme.Transparent.ImagePicker">
+    android:padding="16dp">
 
     <LinearLayout
         android:id="@+id/lytCameraPick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginRight="20px"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16px">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="48dp"
@@ -37,10 +39,12 @@
         android:id="@+id/lytGalleryPick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20px"
         android:layout_marginTop="10dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16px">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="48dp"

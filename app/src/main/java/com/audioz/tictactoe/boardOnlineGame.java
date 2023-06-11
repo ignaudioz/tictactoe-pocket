@@ -40,9 +40,9 @@ public class boardOnlineGame extends View{
     //ProgressDialog
     private ProgressDialog pg;
     private FirebaseDatabase dataBase;
-    private DatabaseReference mPos,mWinner,mPlayers;
+    private DatabaseReference mPos,mPlayers;
     // L stands for listener.
-    private ValueEventListener lPos,lWinner,lPlayers;
+    private ValueEventListener lPos,lPlayers;
 
     public boardOnlineGame(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -84,6 +84,9 @@ public class boardOnlineGame extends View{
         drawGameBroad(canvas);
         drawMarkers(canvas);
 
+        if(game.getWinner()){
+            paint.setColor(winnerColor);             drawWinningLine(canvas);
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -99,7 +102,7 @@ public class boardOnlineGame extends View{
              * of 'X' and 'Y' by the cellsize(clickable box size) then rounding the number up.*/
             int col = (int) Math.ceil(x/cellSize);
             int row = (int) Math.ceil(y/cellSize);
-
+            if(!game.getWinner()) {
                 // if position is free, update the array with the user selection.
                 if (game.updateGameboard(row, col)) {
                     // Checks if there is a winner after a players turn.
@@ -115,8 +118,9 @@ public class boardOnlineGame extends View{
                     }
 
 
-                // Re-drawing the board according to the game's logic array.
-                invalidate();
+                    // Re-drawing the board according to the game's logic array.
+                    invalidate();
+                }
             }
 
             /* returns true if there is a touch event
@@ -149,10 +153,9 @@ public class boardOnlineGame extends View{
         to X:(Same position) Y:(Bottom of canvas {canvas width or height}).
         */
         for(int c=1;c<3;c++) {
-            int XstartEnd=cellSize*c;
-            canvas.drawLine(XstartEnd,
+            canvas.drawLine(cellSize*c,
                     0,
-                    XstartEnd,
+                    cellSize*c,
                     canvas.getWidth(),
                     paint);
         }
@@ -181,7 +184,6 @@ public class boardOnlineGame extends View{
             drawWinningLine(canvas);
             // Removing listeners to avoid crash when one removes the room node by clicking the back button.
             mPos.removeEventListener(lPos);
-            mWinner.removeEventListener(lWinner);
             mPlayers.removeEventListener(lPlayers); // So alert dialog won't pop-up!
 
             game.removeAllListeners();
@@ -197,8 +199,6 @@ public class boardOnlineGame extends View{
         String roomName = playerNames[0];
         // all this work around for this shit thing :(((
         mPos = dataBase.getReference("Rooms/"+roomName+"/Board/pos");
-        // is Winner listener.
-        mWinner = dataBase.getReference("Rooms/"+roomName+"/Board/winner"); // Winner listener.
         // Active players in room listener.
         mPlayers = dataBase.getReference("Rooms/"+roomName+"/players/");
 
@@ -212,20 +212,6 @@ public class boardOnlineGame extends View{
                 }
                 // else do nothing since it runs on start..
             }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Do nothing ig :/
-            }
-        });
-
-        // is there a winner listener.
-        // (this appears twice so we can update the layout aswell)
-        mWinner.addValueEventListener(lWinner = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                invalidate(); // re-drawing board with winning line aswell.
-            }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Do nothing ig :/
@@ -253,7 +239,6 @@ public class boardOnlineGame extends View{
         mPlayers.removeEventListener(lPlayers); // removing players listener first.
         mPlayers.child(player).removeValue(); // removing the player from active players list.
         mPos.removeEventListener(lPos);
-        mWinner.removeEventListener(lWinner);
 
         game.removeAllListeners();
 //        // other listeners remove..
@@ -337,7 +322,7 @@ public class boardOnlineGame extends View{
                 /* Starts 'Y' pos at row place plus fixpos value to
                 avoid drawing on the black line.( drawing the line at the middle of the cell instead of the start(blacklines)*/
                 (float) (row*cellSize + fixpos),
-                (float) (cellSize*3), // Ends 'X' at the end of the board (horizontally wise) aka till 3 cells.
+                (float) (canvas.getWidth()), // Ends 'X' at the end of the board (horizontally wise) aka till 3 cells.
                 (float) (row*cellSize + fixpos), // Ends 'Y' sames as start 'Y', since we want a straight line.
                 paint); // using our selected paint // called in onDraw function.
     }
@@ -353,7 +338,7 @@ public class boardOnlineGame extends View{
                 (float) (col*cellSize + fixpos),
                 (row), // Starts 'Y' pos at row place/Drawing at the top of the cell
                 (float) (col*cellSize + fixpos), // Ends 'X' same as start 'X', since we want a straight line.
-                (float) (cellSize*3), // Ends 'Y' at the end of the board (vertically wise) aka till 3 cells.
+                (float) (canvas.getWidth()), // Ends 'Y' at the end of the board (vertically wise) aka till 3 cells.
                 paint); // using our selected paint // called in onDraw function.
     }
 
@@ -362,18 +347,18 @@ public class boardOnlineGame extends View{
         canvas.drawLine(
                 0, // Starts 'X' at the start of the canvas/board.
                 0, // Starts 'Y' at the start/top of the canvas/board.
-                (float) cellSize*3, // Ends 'X' at the end of the canvas/board.
-                (float) cellSize*3, // Ends 'Y' at the bottom of the canvas/board.
+                (float) canvas.getWidth(), // Ends 'X' at the end of the canvas/board.
+                (float) canvas.getWidth(), // Ends 'Y' at the bottom of the canvas/board.
                 paint); // using our selected paint // called in onDraw function.
     }
 
     private void drawDiagonalPosWin(Canvas canvas){ // Draws Positive-Diagonal winning line.
 
         canvas.drawLine(
-                (float) cellSize*3, // Starts 'X' at the end of the canvas/board.
+                (float) canvas.getWidth(), // Starts 'X' at the end of the canvas/board.
                 0, // Starts 'Y' at the top/start of the canvas/board.
                 0, // Stops 'X' at the start of the canvas/board.
-                (float) cellSize*3, // Stops 'Y' at the end of the canvas/board.
+                (float) canvas.getWidth(), // Stops 'Y' at the end of the canvas/board.
                 paint); // using our selected paint // called in onDraw function.
     }
 
