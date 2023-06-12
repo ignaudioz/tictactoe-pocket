@@ -30,10 +30,9 @@ public class Room extends AppCompatActivity {
     // ImageView
     private ImageView pfpImageView;
     // Buttons
-    private Button backbutton,leavebtn;
+    private Button backbutton;
 
     // Firebase
-    private FirebaseAuth mAuth;
     private FirebaseDatabase dataBase;
     private DatabaseReference mRoom;
     private ValueEventListener lRoom;
@@ -51,7 +50,7 @@ public class Room extends AppCompatActivity {
 
         dataBase = FirebaseDatabase.getInstance("https://tic-tac-toe-pocket-default-rtdb.europe-west1.firebasedatabase.app/");
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
         currentPlayer = mAuth.getCurrentUser().getDisplayName();
 
@@ -63,7 +62,7 @@ public class Room extends AppCompatActivity {
         pfpImageView = findViewById(R.id.pfpImageView);
         //Buttons
         backbutton = findViewById(R.id.backbutton);
-        leavebtn = findViewById(R.id.leavebtn);
+        Button leavebtn = findViewById(R.id.leavebtn);
 
         Intent intent = getIntent();
         roomName = intent.getStringExtra("roomName");
@@ -81,10 +80,6 @@ public class Room extends AppCompatActivity {
         });
 
         leavebtn.setOnClickListener(view -> {
-//            if(backbutton.getVisibility()==View.VISIBLE){
-//                endGame();
-//                finish();
-//            }
             new AlertDialog.Builder(Room.this)
                     .setTitle("Exit prompt")
                             .setMessage("Are you sure you wanna leave? ;(")
@@ -141,9 +136,6 @@ public class Room extends AppCompatActivity {
                         guest = snapshot.child("player2/name").getValue(String.class); // Getting guest's player-name.
                         // Settings player turns name so it won't be blank.
                         String[] names = {roomName, guest};
-//                        playerturn.setText(names[0] + "'s Turn");
-
-//                        pfpImageView.setImageURI(mAuth.getCurrentUser().getPhotoUrl());
 
                         pg.cancel();
                         Toast.makeText(Room.this,"Found a match!",Toast.LENGTH_SHORT).show();
@@ -170,8 +162,6 @@ public class Room extends AppCompatActivity {
     }
 
     private void endGame(){
-//        mRoom.removeEventListener(lRoom);
-//        mRoom.getParent().removeValue(); // removing room node
         dataBase.getReference("Rooms/"+roomName).removeValue(); // removing Room node.
         finish();
     }

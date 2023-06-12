@@ -127,8 +127,6 @@ public class boardGameLogic {
                 imageturn.setImageResource(R.drawable.circle);
             }
             currentPlayer.setText(playerNames[this.player-1]+ " Won!!");
-//            currentPlayer.setText(playerNames[this.player-1]+ " Won!!");
-//            imageturn.setImageResource(R.drawable.xicon);
             return true;
         }
         return winner;

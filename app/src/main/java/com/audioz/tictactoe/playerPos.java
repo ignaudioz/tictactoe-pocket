@@ -1,6 +1,5 @@
 package com.audioz.tictactoe;
 
-import androidx.annotation.NonNull;
 
 public class playerPos {
     // made that shit public since i don't really give a fuck tbh + less writing :~}

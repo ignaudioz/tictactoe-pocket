@@ -34,23 +34,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.UUID;
 
 public class register extends AppCompatActivity {
-    //TextView
-    private TextView status;
     //EditTexts
     private EditText username,email,password;
     //Buttons
-    private Button registerbtn;
-    private ImageButton leavesetup,pfpbtn;
+    private ImageButton pfpbtn;
     //Strings
     private String name,mail,pass;
     //Firebase
@@ -80,14 +75,14 @@ public class register extends AppCompatActivity {
         sRef = storage.getReference(); // Storage reference to get/uplaod images.
 
         // TextViews
-        status = findViewById(R.id.status);
+        TextView status = findViewById(R.id.status);
         // EditTexts
         username = findViewById(R.id.username);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         // Buttons
-        registerbtn = findViewById(R.id.loginbtn);
-        leavesetup = findViewById(R.id.leavesetup);
+        Button registerbtn = findViewById(R.id.loginbtn);
+        ImageButton leavesetup = findViewById(R.id.leavesetup);
         pfpbtn = findViewById(R.id.pfpbtn);
 
         // Creating dialog which will open when pfp logo is clicked.

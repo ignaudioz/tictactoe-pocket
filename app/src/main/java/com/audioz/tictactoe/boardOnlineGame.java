@@ -32,7 +32,6 @@ public class boardOnlineGame extends View{
     private final int boardColor,Xcolor,Ocolor, winnerColor;
     // Paint
     private final Paint paint = new Paint();
-    private boolean winnerCheck = false;
     // Setting the clickable box size; default value equals width/3.
     private int cellSize = getWidth()/3;
     //Stroke width for board's lines.
@@ -106,7 +105,8 @@ public class boardOnlineGame extends View{
                 // if position is free, update the array with the user selection.
                 if (game.updateGameboard(row, col)) {
                     // Checks if there is a winner after a players turn.
-                    winnerCheck = game.getWinner();
+                    game.getWinner();
+
                     /*-- Updating the players turn. --*/
                     //if previous player was 'X' a/k/a '1' switch the turn to 'O' player a/k/a '2'.
                     if (game.getPlayer().equals("host")) {

@@ -29,9 +29,7 @@ public class RoomSelector extends AppCompatActivity {
     // textView
     TextView activeRoomtxtview;
     // Buttons
-    private Button setupRoom,logoutbtn;
-    //ImageButton
-    private ImageButton leavesetup;
+    private Button setupRoom;
     // ListView
     private ListView listView;
     // Strings
@@ -41,7 +39,7 @@ public class RoomSelector extends AppCompatActivity {
     // FireBase
     private FirebaseAuth mAuth;
     private FirebaseDatabase dataBase;
-    private DatabaseReference mRoom,mRoomS;
+    private DatabaseReference mRoom;
     private ProgressDialog pg;
 
     @Override
@@ -64,9 +62,9 @@ public class RoomSelector extends AppCompatActivity {
         activeRoomtxtview = findViewById(R.id.activeRoomtxtview);
         // Button.
         setupRoom = findViewById(R.id.setupRoom);
-        logoutbtn = findViewById(R.id.logoutbtn);
+        Button logoutbtn = findViewById(R.id.logoutbtn);
         //ImageButton
-        leavesetup = findViewById(R.id.leavesetup);
+        ImageButton leavesetup = findViewById(R.id.leavesetup);
         // listView.
         listView = findViewById(R.id.listView);
         // Arraylist that will contain all existing rooms.
@@ -100,7 +98,7 @@ public class RoomSelector extends AppCompatActivity {
                 // Checking if a room is occupied, if so do not join it and alert the player.
                 roomName = roomList.get(i);
                 if (roomName.contains("FULL")) {
-                    Toast.makeText(RoomSelector.this, "The room is full.", Toast.LENGTH_SHORT);
+                    Toast.makeText(RoomSelector.this, "The room is full.", Toast.LENGTH_SHORT).show();
                 } else {
                     // Avoding crash.
                     roomName.replace(" - FULL","");
@@ -139,8 +137,8 @@ public class RoomSelector extends AppCompatActivity {
        });
     }
     private void createRoomsListener() {
-        mRoomS = dataBase.getReference("Rooms");
-        mRoomS.addValueEventListener(new ValueEventListener() {
+        DatabaseReference currentRooms = dataBase.getReference("Rooms");
+        currentRooms.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 roomList.clear(); // clearing roomList so it won't interrupt with adding new rooms.

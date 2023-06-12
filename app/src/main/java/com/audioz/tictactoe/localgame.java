@@ -10,20 +10,19 @@ import android.widget.TextView;
 
 public class localgame extends AppCompatActivity {
    private boardGame TicTacToe;
-   private TextView currPlayer;
-   private ImageView imageturn;
-   private Button resetbtn,backbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_localgame);
 
+
+
         TicTacToe = findViewById(R.id.oBoard);
-        currPlayer = findViewById(R.id.currPlayer);
-        resetbtn = findViewById(R.id.resetbtn);
-        backbtn = findViewById(R.id.backbtn);
-        imageturn = findViewById(R.id.imageturn);
+        TextView currPlayer = findViewById(R.id.currPlayer);
+        Button resetbtn = findViewById(R.id.resetbtn);
+        Button backbtn = findViewById(R.id.backbtn);
+        ImageView imageturn = findViewById(R.id.imageturn);
 
         // Settings player turns name so it won't be blank.
         String[] names = {"X player","O player"};
