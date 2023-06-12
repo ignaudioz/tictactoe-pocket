@@ -3,6 +3,7 @@ package com.audioz.tictactoe;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -110,11 +111,18 @@ public class boardOnlineLogic {
 
         mPfp = dataBase.getReference("Rooms/"+roomName+"/players/");
 
-        mPfp.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+        mPfp.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onSuccess(DataSnapshot dataSnapshot) {
-                playerpfp = new String[]{dataSnapshot.child("player1/pfp").getValue(String.class),
-                        dataSnapshot.child("player2/pfp").getValue(String.class)};
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                Iterable<DataSnapshot> players = snapshot.getChildren();
+                for(DataSnapshot i : players){
+                    for(DataSnapshot j: i.getChildren())
+                        Log.d(i.getKey(), "data: "+j.getValue(String.class));
+                }
+
+                playerpfp = new String[]{snapshot.child("player1/pfp").getValue(String.class),
+                        snapshot.child("player2/pfp").getValue(String.class)};
                 final long ONE_MEGABYTE = 1024 * 1024;
 
 
@@ -155,6 +163,12 @@ public class boardOnlineLogic {
                         }
                     });
                 }
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 
@@ -295,13 +309,22 @@ public class boardOnlineLogic {
             currentPlayer.setText(R.string.tieGame);
             winner=true;
         }
-        if(winner){
+        if(winner) {
             backbtn.setVisibility(View.VISIBLE);
-            if(serveRole.equals("host"))
-                currentPlayer.setText("(guest) "+playerNames[1]+ " Won!!");
-            else
-                currentPlayer.setText("(host) "+playerNames[0]+ " Won!!");
-
+            if (serveRole.equals("host")) {
+                currentPlayer.setText("(guest) " + playerNames[1] + " Won!!");
+                if(playerImages[1]==null) // handle no pfp.
+                    currentAvatar.setImageResource(R.drawable.default_profile);
+                else
+                    currentAvatar.setImageBitmap(playerImages[1]);
+            }
+            else {
+                currentPlayer.setText("(host) " + playerNames[0] + " Won!!");
+                if(playerImages[0]==null) // handle no pfp.
+                    currentAvatar.setImageResource(R.drawable.default_profile);
+                else
+                    currentAvatar.setImageBitmap(playerImages[0]);
+            }
             mWinner.setValue(this.winKind);
         }
         return winner;
