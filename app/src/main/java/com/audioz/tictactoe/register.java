@@ -183,32 +183,36 @@ public class register extends AppCompatActivity {
             name = String.valueOf(username.getText());
             mail = String.valueOf(email.getText());
             pass = String.valueOf(password.getText());
+
             // the code speaks for itself...
+            boolean error = false;
+
             if (TextUtils.isEmpty(name)) {
                 username.setError("Username is required!");
-                email.requestFocus();
-                return;
+                error = true;
             }
             if (name.contains(" ") || name.contains(".")) {
                 username.setError("Spaces or dots are not allowed!");
-                email.requestFocus();
-                return;
+                error = true;
             }
             if (TextUtils.isEmpty(mail) || !Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
                 email.setError("Please provide a valid email!");
-                email.requestFocus();
-                return;
+                error = true;
             }
             if (TextUtils.isEmpty(pass)) {
                 password.setError("Password is required!");
-                password.requestFocus();
-                return;
+                error = true;
+            }
+            if (name.length()<3 || name.length()>8) {
+                username.setError("Password length should be greater than 5!");
+                error = true;
             }
             if (pass.length()<5) {
                 password.setError("Password length should be greater than 5!");
-                password.requestFocus();
-                return;
+                error = true;
             }
+            if(error)
+                return;
 
             // Creating ProgressDialog so user won't spam requests and won't left hanging in register activity without action.
             pg = new ProgressDialog(this);

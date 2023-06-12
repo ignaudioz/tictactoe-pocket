@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Homepage"
-    style="@style/screen">
+    tools:context=".homePage">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,17 +17,15 @@
 
         <Button
             android:id="@+id/startbtn"
-            style="@style/b1"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:shadowColor="#000000"
             android:text="@string/start" />
 
         <Button
             android:id="@+id/exitbtn"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:backgroundTint="@color/red"
+            android:backgroundTint="#bf616a"
             android:text="@string/exit" />
     </LinearLayout>
 

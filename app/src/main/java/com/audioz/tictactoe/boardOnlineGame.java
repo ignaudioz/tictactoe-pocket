@@ -83,8 +83,16 @@ public class boardOnlineGame extends View{
         drawGameBroad(canvas);
         drawMarkers(canvas);
 
+        // Draw winning line is here because of invalidate func..
         if(game.getWinner()){
-            paint.setColor(winnerColor);             drawWinningLine(canvas);
+            paint.setColor(winnerColor); // Setting winner line color.
+            drawWinningLine(canvas);
+
+            // Removing listeners to avoid crash when one removes the room node by clicking the back button.
+            mPos.removeEventListener(lPos);
+            mPlayers.removeEventListener(lPlayers); // So alert dialog won't pop-up!
+
+            game.removeAllListeners();
         }
     }
 
@@ -104,18 +112,20 @@ public class boardOnlineGame extends View{
             if(!game.getWinner()) {
                 // if position is free, update the array with the user selection.
                 if (game.updateGameboard(row, col)) {
-                    // Checks if there is a winner after a players turn.
-                    game.getWinner();
 
                     /*-- Updating the players turn. --*/
                     //if previous player was 'X' a/k/a '1' switch the turn to 'O' player a/k/a '2'.
                     if (game.getPlayer().equals("host")) {
                         game.setPlayer("guest");
                     }
+
                     //if previous player was 'O' a/k/a '2' switch the turn to 'X' player a/k/a '1'.
                     else {
                         game.setPlayer("host");
                     }
+                    // Checks if there is a winner after a players turn.
+                    game.getWinner();
+
 
 
                     // Re-drawing the board according to the game's logic array.
@@ -178,16 +188,6 @@ public class boardOnlineGame extends View{
             }
         }
 
-        // Draw winning line is here because of invalidate func..
-        if(game.getWinner()){
-            paint.setColor(winnerColor); // Setting winner line color.
-            drawWinningLine(canvas);
-            // Removing listeners to avoid crash when one removes the room node by clicking the back button.
-            mPos.removeEventListener(lPos);
-            mPlayers.removeEventListener(lPlayers); // So alert dialog won't pop-up!
-
-            game.removeAllListeners();
-        }
     }
 
     public void setUpGame(Button backbtn, TextView currentPlayer, ImageView currentAvatar, String[] playerNames, String role, AlertDialog.Builder ad){
@@ -284,10 +284,10 @@ public class boardOnlineGame extends View{
     }
 
     private void drawWinningLine(Canvas canvas){// identifying which kind of winning line is used.
-        int row= game.getWinKind()[0];
-        int col= game.getWinKind()[1];
+        int row=game.getWinType()[0];
+        int col=game.getWinType()[1];
 
-        switch(game.getWinKind()[2]){
+        switch(game.getWinType()[2]){
             case 1:
                 drawHorizontalWin(canvas,row,col);
                 break;

@@ -91,7 +91,11 @@ public class Room extends AppCompatActivity {
                                 else
                                     onlineGameboard.leavegame("player1");
 
-                                Room.this.finish(); // just in-case
+                                if(playerturn.getText().toString().contains("Won!!"))
+                                    endGame();
+                                else
+                                    Room.this.finish();
+
                             })
                             .setNegativeButton("cancel", (dialogInterface, i)->{})//Do nothing.
                     .show();

@@ -11,8 +11,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,18 +38,12 @@ public class boardOnlineLogic {
     private Button backbtn;
     private TextView currentPlayer;
     private ImageView currentAvatar;
-    private String[] playerNames= {"",""};
+    private String[] playerNames= {"",""},playerpfp;
     private Bitmap[] playerImages= new Bitmap[2];
-    private String[] playerpfp;
 
-    // 1st element = row, 2nd element = column, 3nd element = line winning type.
-    // row and column needed to know where to start drawing the line (this is only relative if the win is NOT diagonal).
-    // if 3nd element equals 1 then Winning type is Horizontal, if 2 then Vertical, if 3 Negative Diagonal, if 4 Positive Diagonal.
-    // Default value[{-1,-1,-1}] which also means tie.
-    // I have to create a separate class for it because of firebase limitation..
-    private winType winKind = new winType(-1, -1, -1);
-    private double playcount = 0; // play-count so we can reduce tie checking;
-    private String role,serveRole;
+    private int[] WinType = new int[] {-1, -1, -1};
+    private double playcount = 0; // double for firebase..
+    private String role,serveRole,winnerName;
 
     boardOnlineLogic() {
         // Resetting board-array on start, even thought it's already zeros on create smh..
@@ -69,18 +65,16 @@ public class boardOnlineLogic {
             return false;
 
         // Stop updating game board if there is a winner.
-        if(!getWinner()) {
-            if(this.gameboard[row-1][col-1] == 0) {
-                //Updating playcount to the server.
-                this.playcount +=1;
-                mPlaycount.setValue(this.playcount);
-                // tinkering with bullshit so it will work..
-                // fuck this bitchass database may yo mama die tmr google founders..
-                playerPos oPos = new playerPos(row - 1, col - 1);
-                mPos.setValue(oPos); // updating user action in the server.
+        if(this.gameboard[row-1][col-1] == 0) {
+            //Updating playcount to the server.
+            this.playcount +=1;
+            mPlaycount.setValue(this.playcount);
+            // tinkering with bullshit so it will work..
+            // fuck this bitchass database may yo mama die tmr google founders..
+            playerPos oPos = new playerPos(row - 1, col - 1);
+            mPos.setValue(oPos); // updating user action in the server.
 
-                return true;
-            }
+            return true;
         }
         return false;
     }
@@ -105,7 +99,7 @@ public class boardOnlineLogic {
         // Using play-count for avoiding checking for a winner before 5 plays from both players combined to avoid unnecessary checks.
         mPlaycount = dataBase.getReference("Rooms/"+roomName+"/Board/playcount");
         // Winner listener.
-        mWinner = dataBase.getReference("Rooms/"+roomName+"/Board/winner");
+        mWinner = dataBase.getReference("Rooms/"+roomName+"/Board/winner/");
         // CurrentPlayer data location/reference.
         mPlayer = dataBase.getReference("Rooms/"+roomName+"/Board/currentPlayer");
 
@@ -180,7 +174,7 @@ public class boardOnlineLogic {
                     // Made it so it will be easier to-pull last player selection from firebase.
                     playerPos newPos = dataSnapshot.getValue(playerPos.class);
                     if(serveRole.equals("host")){
-                        gameboard[newPos.row][newPos.col] = 1;
+                        gameboard[newPos.row][newPos.col] = 1; // x
                         currentPlayer.setText("(guest) "+playerNames[1] + "'s Turn");
                         if(playerImages[1]==null) // handle no pfp.
                             currentAvatar.setImageResource(R.drawable.default_profile);
@@ -188,7 +182,7 @@ public class boardOnlineLogic {
                             currentAvatar.setImageBitmap(playerImages[1]);
                     }
                     else{
-                        gameboard[newPos.row][newPos.col] = 2;
+                        gameboard[newPos.row][newPos.col] = 2; // o
                         currentPlayer.setText("(host) "+playerNames[0] + "'s Turn");
                         if(playerImages[0]==null) // handle no pfp.
                             currentAvatar.setImageResource(R.drawable.default_profile);
@@ -220,9 +214,10 @@ public class boardOnlineLogic {
 
         // is there a winner listener.
         mWinner.addValueEventListener(lWinner = new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-               winKind = snapshot.getValue(winType.class); // updating winkind/type in client and alerting a win both in ui and backend.
+                winnerName = snapshot.getValue(String.class); // updating winkind/type in client and alerting a win both in ui and backend.
             }
 
             @Override
@@ -230,7 +225,7 @@ public class boardOnlineLogic {
                 // Do nothing ig :/
             }
         });
-        mWinner.setValue(winKind); // setting default value in to the server (false);
+        mWinner.setValue("none");
 
         // Current player/role listener.
         mPlayer.addValueEventListener(lPlayer=new ValueEventListener() {
@@ -276,7 +271,7 @@ public class boardOnlineLogic {
         for(int r=0;r<3;r++){
             if(gameboard[r][0] != 0 &&
                     gameboard[r][0] == gameboard[r][1] && gameboard[r][0] == gameboard[r][2]){
-                this.winKind = new winType(r, 0, 1);
+                this.WinType = new int[]{r,0,1};
                 winner = true;
             }
         }
@@ -285,7 +280,7 @@ public class boardOnlineLogic {
         for(int c=0;c<3;c++){
             if(gameboard[0][c] != 0 &&
                     gameboard[0][c] == gameboard[1][c] && gameboard[0][c] == gameboard[2][c]){
-                this.winKind = new winType(0, c, 2);
+                this.WinType = new int[]{0,c,2};
                 winner = true;
             }
         }
@@ -293,13 +288,13 @@ public class boardOnlineLogic {
         // Checks diagonal from first top left cell to bottom right cell. ~~ Negative Diagonal.
         if(this.gameboard[0][0]==this.gameboard[1][1] && this.gameboard[0][0]==this.gameboard[2][2]){
             winner=true;
-            this.winKind = new winType(0,0,3);
+            this.WinType = new int[]{0,0,3};
         }
 
         // Checks diagonal from first left bottom cell to top right cell. ~~ Positive Diagonal.
         if(this.gameboard[2][0]==this.gameboard[1][1] && this.gameboard[2][0]==this.gameboard[0][2]){
             winner=true;
-            this.winKind = new winType(0,2,4);
+            this.WinType = new int[]{0,0,4};
         }
 
         /* if there's no winner and the play count is 9,
@@ -310,8 +305,15 @@ public class boardOnlineLogic {
             winner=true;
         }
         if(winner) {
+            String currPlayer = serveRole;
+            boolean first = true;
+            if( !(winnerName.equals("")) ){
+               currPlayer= winnerName;
+               first = false;
+            }
+
             backbtn.setVisibility(View.VISIBLE);
-            if (serveRole.equals("host")) {
+            if (currPlayer.equals("guest")) {
                 currentPlayer.setText("(guest) " + playerNames[1] + " Won!!");
                 if(playerImages[1]==null) // handle no pfp.
                     currentAvatar.setImageResource(R.drawable.default_profile);
@@ -325,7 +327,8 @@ public class boardOnlineLogic {
                 else
                     currentAvatar.setImageBitmap(playerImages[0]);
             }
-            mWinner.setValue(this.winKind);
+            if(first)
+                mWinner.setValue(serveRole);
         }
         return winner;
     }
@@ -337,8 +340,8 @@ public class boardOnlineLogic {
         return this.serveRole;
     } // returning getPlayer
 
-    public int[] getWinKind() {
-        return new int[]{winKind.row,winKind.col,winKind.lineType}; // returning an array that contains:
+    public int[] getWinType() {
+        return WinType;
         // 1st element = row, 2nd element = column, 3nd element = line winning type.
         // row and column needed to know where to start drawing the line (this is only relative if the win is NOT diagonal).
         // if 3nd element equals 1 then Winning type is Horizontal, if 2 then Vertical, if 3 Negative Diagonal, if 4 Positive Diagonal.

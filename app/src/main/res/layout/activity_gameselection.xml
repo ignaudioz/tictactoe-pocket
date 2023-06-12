@@ -2,10 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".selectGameKind">
+    tools:context=".gameSelection">
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -20,7 +19,7 @@
             android:id="@+id/btnleave"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:backgroundTint="@android:color/holo_orange_dark"
+            android:backgroundTint="#50FA7B"
             android:contentDescription="Back button"
             app:srcCompat="?attr/actionModeCloseDrawable"
             tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
@@ -28,12 +27,12 @@
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="monospace"
+            android:layout_height="match_parent"
+            android:fontFamily="casual"
             android:text="@string/playmode"
             android:textAlignment="center"
-            android:textSize="24sp"
-            android:textStyle="bold|italic" />
+            android:textSize="34sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
@@ -49,8 +48,9 @@
             android:id="@+id/localbtn"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:backgroundTint="#FB9F00"
+            android:backgroundTint="#6272A4"
             android:drawableStart="@drawable/ic_baseline_supervisor_account_24"
+            android:fontFamily="@font/arimo"
             android:text="Local" />
 
         <Button
@@ -58,6 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:drawableStart="@drawable/ic_baseline_groups_24"
+            android:fontFamily="@font/arimo"
             android:text="Multiplayer" />
 
     </LinearLayout>

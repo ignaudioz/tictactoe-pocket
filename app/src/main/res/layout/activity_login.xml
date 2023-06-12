@@ -5,25 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".login"
-    style="@style/screen">
+    >
 
     <Button
         android:id="@+id/loginbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="44dp"
-        android:backgroundTint="@color/weird_gray"
+        android:layout_marginTop="128dp"
         android:text="@string/login"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/status" />
 
     <ImageButton
         android:id="@+id/leavesetup"
-        android:layout_width="45dp"
-        android:layout_height="33dp"
-        android:backgroundTint="@android:color/holo_orange_dark"
+        android:layout_width="48dp"
+        android:layout_height="37dp"
+        android:backgroundTint="#50fa7b"
         android:contentDescription="@string/back_desc"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -34,6 +33,7 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="casual"
         android:text="@string/loginTitle"
         android:textColor="#4E4F50"
         android:textSize="34sp"
@@ -45,47 +45,50 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="142dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="128dp"
+        android:layout_marginEnd="5dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/loginbtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/textView5">
 
 
         <EditText
             android:id="@+id/email"
+            style="@style/_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:drawableStart="@drawable/baseline_email_24"
             android:ems="10"
             android:hint="@string/setupEmail"
-            android:inputType="textEmailAddress"
-            style="@style/_txt"/>
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/password"
+            style="@style/_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_baseline_password_24"
             android:ems="10"
             android:hint="@string/setupPassword"
-            android:inputType="textPassword"
-            style="@style/_txt" />
+            android:inputType="textPassword" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="-50dp"
+        android:layout_marginTop="24dp"
         android:text="@string/noAcc"
-        android:textColor="@color/hyperlink"
+        android:textColor="#8BD5FD"
         android:textSize="16sp"
         android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

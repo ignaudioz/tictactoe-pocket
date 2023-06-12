@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="20px"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical"
@@ -26,12 +25,12 @@
             app:tint="@color/dialog_choose_icon_color" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
+            android:layout_width="180px"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:gravity="center"
             android:text="@string/title_camera"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="#616161" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     </LinearLayout>
 
@@ -39,7 +38,6 @@
         android:id="@+id/lytGalleryPick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20px"
         android:layout_marginTop="10dp"
         android:layout_weight="1"
         android:gravity="center"
@@ -53,12 +51,12 @@
             app:tint="@color/dialog_choose_icon_color" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
+            android:layout_width="180px"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:gravity="center"
             android:text="@string/title_gallery"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="#616161" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     </LinearLayout>
 

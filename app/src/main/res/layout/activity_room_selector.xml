@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RoomSelector">
@@ -10,7 +9,7 @@
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="410dp"
-        android:layout_height="44dp"
+        android:layout_height="55dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,9 +17,11 @@
 
         <ImageButton
             android:id="@+id/leavesetup"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:backgroundTint="@android:color/holo_orange_dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:backgroundTint="#50fa7b"
             android:contentDescription="@string/back_desc"
             app:srcCompat="?attr/actionModeCloseDrawable"
             tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,RedundantDescriptionCheck" />
@@ -28,42 +29,48 @@
         <TextView
             android:id="@+id/textView3"
             style="@style/txt1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="174dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginStart="40dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="35dp"
+            android:fontFamily="casual"
             android:text="Room Selector"
+            android:textAlignment="center"
             android:textSize="24sp" />
 
         <Button
             android:id="@+id/logoutbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
+            android:backgroundTint="#ff5555"
             android:text="@string/logout" />
 
     </LinearLayout>
 
     <ListView
         android:id="@+id/listView"
-        android:layout_width="409dp"
-        android:layout_height="633dp"
+        android:layout_width="0dp"
+        android:layout_height="460dp"
+        android:layout_marginTop="8dp"
+        android:scrollbars="vertical"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
-
-    </ListView>
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/setupRoom"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="536dp"
+        android:layout_width="413dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="512dp"
+        android:fontFamily="@font/arimo"
         android:text="@string/createRoom"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
@@ -73,6 +80,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="214dp"
+        android:fontFamily="casual"
         android:text="@string/noPlayers"
         android:textSize="30sp"
         android:textStyle="italic"
