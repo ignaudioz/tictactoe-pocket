@@ -247,7 +247,7 @@ public class boardGame extends View{
                 /* Starts 'Y' pos at row place plus fixpos value to
                 avoid drawing on the black line.( drawing the line at the middle of the cell instead of the start(blacklines)*/
                 (float) (row*cellSize + fixpos),
-                (float) (cellSize*3), // Ends 'X' at the end of the board (horizontally wise) aka till 3 cells.
+                (float) (canvas.getWidth()), // Ends 'X' at the end of the board (horizontally wise) aka till 3 cells.
                 (float) (row*cellSize + fixpos), // Ends 'Y' sames as start 'Y', since we want a straight line.
                 paint); // using our selected paint // called in onDraw function.
     }
@@ -263,7 +263,7 @@ public class boardGame extends View{
                 (float) (col*cellSize + fixpos),
                 (row), // Starts 'Y' pos at row place/Drawing at the top of the cell
                 (float) (col*cellSize + fixpos), // Ends 'X' same as start 'X', since we want a straight line.
-                (float) (cellSize*3), // Ends 'Y' at the end of the board (vertically wise) aka till 3 cells.
+                (float) (canvas.getWidth()), // Ends 'Y' at the end of the board (vertically wise) aka till 3 cells.
                 paint); // using our selected paint // called in onDraw function.
     }
 
@@ -272,18 +272,18 @@ public class boardGame extends View{
         canvas.drawLine(
                 0, // Starts 'X' at the start of the canvas/board.
                 0, // Starts 'Y' at the start/top of the canvas/board.
-                (float) cellSize*3, // Ends 'X' at the end of the canvas/board.
-                (float) cellSize*3, // Ends 'Y' at the bottom of the canvas/board.
+                (float) canvas.getWidth(), // Ends 'X' at the end of the canvas/board.
+                (float) canvas.getWidth(), // Ends 'Y' at the bottom of the canvas/board.
                 paint); // using our selected paint // called in onDraw function.
     }
 
     private void drawDiagonalPosWin(Canvas canvas){ // Draws Positive-Diagonal winning line.
 
         canvas.drawLine(
-                (float) cellSize*3, // Starts 'X' at the end of the canvas/board.
+                (float) canvas.getWidth(), // Starts 'X' at the end of the canvas/board.
                 0, // Starts 'Y' at the top/start of the canvas/board.
                 0, // Stops 'X' at the start of the canvas/board.
-                (float) cellSize*3, // Stops 'Y' at the end of the canvas/board.
+                (float) canvas.getWidth(), // Stops 'Y' at the end of the canvas/board.
                 paint); // using our selected paint // called in onDraw function.
     }
 }
