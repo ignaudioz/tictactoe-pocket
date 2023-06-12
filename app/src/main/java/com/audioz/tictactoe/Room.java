@@ -7,9 +7,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -68,10 +67,9 @@ public class Room extends AppCompatActivity {
 
         Intent intent = getIntent();
         roomName = intent.getStringExtra("roomName");
+        Log.d("Roomname: ",roomName);
         // Setting reference.
         mRoom = dataBase.getReference("Rooms/"+roomName+"/players");
-
-        Bitmap defaultAvatar = BitmapFactory.decodeResource(getResources(),R.drawable.default_profile);
 
         // Hiding buttons before setup.
         backbutton.setVisibility(View.GONE);
@@ -83,10 +81,10 @@ public class Room extends AppCompatActivity {
         });
 
         leavebtn.setOnClickListener(view -> {
-            if(backbutton.getVisibility()==View.VISIBLE){
-                endGame();
-                finish();
-            }
+//            if(backbutton.getVisibility()==View.VISIBLE){
+//                endGame();
+//                finish();
+//            }
             new AlertDialog.Builder(Room.this)
                     .setTitle("Exit prompt")
                             .setMessage("Are you sure you wanna leave? ;(")
@@ -119,7 +117,7 @@ public class Room extends AppCompatActivity {
             String[] names = {roomName,currentPlayer};
             Toast.makeText(Room.this,"Connected!",Toast.LENGTH_SHORT).show();
             // Calling game-setup to involve Visual objects from root activity/this activity.
-            onlineGameboard.setUpGame(backbutton,playerturn,pfpImageView,names,role,ad,defaultAvatar);
+            onlineGameboard.setUpGame(backbutton,playerturn,pfpImageView,names,role,ad);
         }else
         {
             // Setting up progress dialog.
@@ -135,16 +133,8 @@ public class Room extends AppCompatActivity {
                 }
             });
             pg.show();
-            // Setting up alert-dialog in-case the guest leaves.
-            ad = new AlertDialog.Builder(Room.this)
-                    .setTitle("Player left!")
-                    .setMessage("The guest ("+guest+") left the game.")
-                    .setPositiveButton("ok", (dialogInterface, i) -> {
-                        endGame();
-                    });
 
-
-            mRoom.addListenerForSingleValueEvent(lRoom = new ValueEventListener() {
+            mRoom.addValueEventListener(lRoom = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(snapshot.hasChild("player2")) {
@@ -158,7 +148,7 @@ public class Room extends AppCompatActivity {
                         pg.cancel();
                         Toast.makeText(Room.this,"Found a match!",Toast.LENGTH_SHORT).show();
                         // Calling game-setup to involve Visual objects from root activity/this activity.
-                        onlineGameboard.setUpGame(backbutton,playerturn,pfpImageView,names,role,ad,defaultAvatar);
+                        onlineGameboard.setUpGame(backbutton,playerturn,pfpImageView,names,role,ad);
                         mRoom.removeEventListener(this);
                     }
                     // else do nothing since it's reacting to player1 node.
@@ -168,6 +158,14 @@ public class Room extends AppCompatActivity {
                     Toast.makeText(Room.this,"Error:"+error.toString(),Toast.LENGTH_LONG).show();
                 }
             });
+
+            // Setting up alert-dialog in-case the guest leaves.
+            ad = new AlertDialog.Builder(Room.this)
+                    .setTitle("Player left!")
+                    .setMessage("The guest ("+guest+") left the game.")
+                    .setPositiveButton("ok", (dialogInterface, i) -> {
+                        endGame();
+                    });
         }
     }
 

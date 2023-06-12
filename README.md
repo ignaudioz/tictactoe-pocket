@@ -1,6 +1,6 @@
 # TicTacToe - Pocket
 
-minimalistic TicTacToe app with multiplayer.
+minimalistic TicTacToe app with multiplayer. (firebase)
 
 ## Build
 

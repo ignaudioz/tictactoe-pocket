@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-public class MainActivity2 extends AppCompatActivity {
+public class selectGameKind extends AppCompatActivity {
 
     //SharedPreference
     SharedPreferences sharedPreferences;

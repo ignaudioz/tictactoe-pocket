@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class Homepage extends AppCompatActivity {
 
     //SharedPreference
     SharedPreferences sharedPreferences;
@@ -65,19 +65,19 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
         });
 
-        exitbtn.setOnClickListener(view -> new AlertDialog.Builder(MainActivity.this)
+        exitbtn.setOnClickListener(view -> new AlertDialog.Builder(Homepage.this)
                         .setTitle("Exit prompt")
                         .setMessage("Are you sure you wanna leave? ;(")
                         .setCancelable(true)
 
                         .setPositiveButton("exit", (dialogInterface, i) -> finish())
-                        .setNegativeButton("cancel", (dialogInterface, i) -> Toast.makeText(MainActivity.this, "Nice ;)",
+                        .setNegativeButton("cancel", (dialogInterface, i) -> Toast.makeText(Homepage.this, "Nice ;)",
                                         Toast.LENGTH_SHORT).show())
                         .show()
         );
 
         startbtn.setOnClickListener(view -> {
-            Intent i =new Intent(MainActivity.this, MainActivity2.class);
+            Intent i =new Intent(Homepage.this, selectGameKind.class);
             startActivity(i);
         });
     }

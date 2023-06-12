@@ -190,10 +190,10 @@ public class boardOnlineGame extends View{
         }
     }
 
-    public void setUpGame(Button backbtn, TextView currentPlayer, ImageView currentAvatar, String[] playerNames, String role, AlertDialog.Builder ad, Bitmap defaultAvatar){
+    public void setUpGame(Button backbtn, TextView currentPlayer, ImageView currentAvatar, String[] playerNames, String role, AlertDialog.Builder ad){
         dataBase = FirebaseDatabase.getInstance("https://tic-tac-toe-pocket-default-rtdb.europe-west1.firebasedatabase.app/");
 
-        game.setUpGame(backbtn, currentPlayer, currentAvatar,playerNames, role,dataBase,defaultAvatar);
+        game.setUpGame(backbtn, currentPlayer, currentAvatar,playerNames, role,dataBase);
 
         // CAN'T SAVE TWO DIMINSONAL ARRAY :(((((((((((((((
         String roomName = playerNames[0];
@@ -241,11 +241,6 @@ public class boardOnlineGame extends View{
         mPos.removeEventListener(lPos);
 
         game.removeAllListeners();
-//        // other listeners remove..
-//        mPos.removeEventListener(lPos);
-//        mWinner.removeEventListener(lWinner);
-//        game.removeAllListeners();
-
     }
 
     private void drawX(Canvas canvas, int row, int col){ // Draws 'X'
@@ -257,19 +252,19 @@ public class boardOnlineGame extends View{
 
         // This function draws diagonal line a/k/a negative diagonal using StartX,EndX,StatY and EndY positions that are given.
         canvas.drawLine(
-                (float) (col*cellSize + fixpos), // Starts 'X' at the start of the selected cell added with "fixpos" to make the 'X' fit right (horizontally wise).
-                (float) (row*cellSize + fixpos), // Starts 'Y' at the selected cell added with "fixpos" to make the 'Y' fit right (vertically wise).
-                (float) ((col+1)*cellSize - fixpos), // Ends 'X' at the right start of the next cell and fixing its position by subtracting "fixpos" from it ( to fix it horizontally wise).
-                (float) ((row+1)*cellSize - fixpos), // Ends 'Y' at the top start of the next cell(the under-cell) and fixing its position by subtracting "fixpos" from it ( to fix it vertically wise).
-                paint); // using our selected paint.
+                (float) (col*cellSize + fixpos), // Starts 'X'
+                (float) (row*cellSize + fixpos), // Starts 'Y'
+                (float) ((col+1)*cellSize - fixpos), // Ends 'X'
+                (float) ((row+1)*cellSize - fixpos), // Ends 'Y'
+                paint);
 
         // This function draws the opposite diagonal line a/k/a positive diagonal using StartX,EndX,StatY and EndY positions that are given.
         canvas.drawLine(
-                (float) ((col+1)*cellSize - fixpos),// Starts 'X' at the right start of the next cell and fixing its position by subtracting "fixpos" from it ( to fix it horizontally wise).
-                (float) (row*cellSize + fixpos), // Starts 'Y' at the selected cell added with "fixpos" to make the 'Y' fit right (vertically wise).
-                (float) (col*cellSize + fixpos), // Ends 'X' at the start of the selected cell added with "fixpos" to make the 'X' fit right (horizontally wise).
-                (float) ((row+1)*cellSize - fixpos),// Ends 'Y' at the top start of the next cell(the under-cell) and fixing its position by subtracting "fixpos" from it ( to fix it vertically wise).
-                paint);// using our selected paint.
+                (float) ((col+1)*cellSize - fixpos),// Starts 'X'
+                (float) (row*cellSize + fixpos), // Starts 'Y'
+                (float) (col*cellSize + fixpos), // Ends 'X'
+                (float) ((row+1)*cellSize - fixpos),// Ends 'Y'
+                paint);
     }
 
     private void drawO(Canvas canvas, int row, int col){ // Draws 'O'

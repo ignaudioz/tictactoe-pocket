@@ -15,8 +15,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -75,7 +73,7 @@ public class RoomSelector extends AppCompatActivity {
         roomList = new ArrayList<>();
         // leave multiplayer setup button.
         leavesetup.setOnClickListener(view -> {
-           finish();
+            finish();
         });
         // logout from account button.
         logoutbtn.setOnClickListener(view -> {
@@ -84,13 +82,13 @@ public class RoomSelector extends AppCompatActivity {
         });
 
         // create-room button click listener.
-        setupRoom.setOnClickListener(view ->{
+        setupRoom.setOnClickListener(view -> {
             pg.setTitle("Creating room");
             pg.setMessage("Creating your room");
             pg.show();
             setupRoom.setEnabled(false);
             roomName = username;
-            mRoom = dataBase.getReference("Rooms/" + roomName + "/players/player1"); // Adding under Rooms an object that is named player1 because we are the host.
+            mRoom = dataBase.getReference("Rooms/"+roomName+"/players/player1"); // Adding under Rooms an object that is named player1 because we are the host.
             createRoomEventListener();
             mRoom.child("name").setValue(username); // setting player1's value to username for convenient.
             mRoom.child("pfp").setValue(pfp);
@@ -99,30 +97,23 @@ public class RoomSelector extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                pg.setTitle("Joining room");
-                pg.setMessage("Loading the room");
-                pg.show();
-
-                roomName = roomList.get(i); // getting clicked position and matching it to the string array then getting it's content.
-                mRoom = dataBase.getReference("Rooms/" + roomName + "/players/player2"); // Adding under Rooms an object that named player2, because we join as guests.
                 // Checking if a room is occupied, if so do not join it and alert the player.
-                mRoom.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        /* Checking if Rooms/{roomName}/players/player2 exists
-                        *  if so dismiss progressdialog else:
-                        *  create a room.*/
+                roomName = roomList.get(i);
+                if (roomName.contains("FULL")) {
+                    Toast.makeText(RoomSelector.this, "The room is full.", Toast.LENGTH_SHORT);
+                } else {
+                    // Avoding crash.
+                    roomName.replace(" - FULL","");
+                    mRoom = dataBase.getReference("Rooms/" + roomName + "/players/player2");
 
-                        if(task.getResult().exists()){
-                            pg.dismiss();
-                            Toast.makeText(RoomSelector.this, "The room is already full!",Toast.LENGTH_SHORT).show();
-                        }else{
-                            createRoomEventListener();
-                            mRoom.child("name").setValue(username); // setting player2's value to username for convenient.
-                            mRoom.child("pfp").setValue(pfp);
-                        }
-                    }
-                });
+                    pg.setTitle("Joining room");
+                    pg.setMessage("Loading the room");
+                    pg.show();
+
+                    createRoomEventListener();
+                    mRoom.child("name").setValue(username); // setting player2's value to username for convenient.
+                    mRoom.child("pfp").setValue(pfp);
+                }
             }
         });
         createRoomsListener();
@@ -138,7 +129,6 @@ public class RoomSelector extends AppCompatActivity {
                i.putExtra("roomName",roomName);
                startActivity(i);
                mRoom.removeEventListener(this);
-               finish();
            }
 
            @Override
@@ -156,7 +146,10 @@ public class RoomSelector extends AppCompatActivity {
                 roomList.clear(); // clearing roomList so it won't interrupt with adding new rooms.
                 Iterable<DataSnapshot> rooms = snapshot.getChildren();
                 for(DataSnapshot i: rooms){
-                    roomList.add(i.getKey());
+                    if(i.hasChild("players/player2"))
+                        roomList.add(i.getKey()+" - FULL");
+                    else
+                        roomList.add(i.getKey());
                 }
 
                 /* if there is active room

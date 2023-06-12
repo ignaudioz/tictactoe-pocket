@@ -1,5 +1,6 @@
 package com.audioz.tictactoe;
 
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.View;
@@ -9,10 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,7 +37,7 @@ public class boardOnlineLogic {
     private ImageView currentAvatar;
     private String[] playerNames= {"",""};
     private Bitmap[] playerImages= new Bitmap[2];
-    private String[] playerpfp= {"",""};
+    private String[] playerpfp;
 
     // 1st element = row, 2nd element = column, 3nd element = line winning type.
     // row and column needed to know where to start drawing the line (this is only relative if the win is NOT diagonal).
@@ -85,7 +84,7 @@ public class boardOnlineLogic {
         return false;
     }
 
-    public void setUpGame(Button backbtn, TextView currentPlayer, ImageView currentAvatar, String[] names, String role, FirebaseDatabase inst, Bitmap defaultAvatar){
+    public void setUpGame(Button backbtn, TextView currentPlayer, ImageView currentAvatar, String[] names, String role, FirebaseDatabase inst){
         this.backbtn = backbtn;
         this.currentPlayer = currentPlayer;
         this.currentAvatar = currentAvatar;
@@ -114,44 +113,48 @@ public class boardOnlineLogic {
         mPfp.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
-                playerpfp[0] = dataSnapshot.child("player1/pfp").getValue(String.class);
-                playerpfp[1] = dataSnapshot.child("player2/pfp").getValue(String.class);
+                playerpfp = new String[]{dataSnapshot.child("player1/pfp").getValue(String.class),
+                        dataSnapshot.child("player2/pfp").getValue(String.class)};
+                final long ONE_MEGABYTE = 1024 * 1024;
+
 
                 // Getting images only once since it won't change.
                 // Host avatar.
-                StorageReference player1img = sRef.child(playerpfp[0]);
-                final long ONE_MEGABYTE = 1024 * 1024;
-                player1img.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        Bitmap temp = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                        currentAvatar.setImageBitmap(temp);
-                        playerImages[0] = temp;
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors, fall back to default pfp.
-                        currentAvatar.setImageBitmap(defaultAvatar);
-                        playerImages[0] = defaultAvatar;
-                    }
-                });
-                StorageReference player2img = sRef.child(playerpfp[1]);
-                player2img.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        Bitmap temp = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                if (playerpfp[0] != null) {
+                    StorageReference player1img = sRef.child(playerpfp[0]);
+                    player1img.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            Bitmap temp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            currentAvatar.setImageBitmap(temp);
+                            playerImages[0] = temp;
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors, fall back to default pfp.
+                            currentAvatar.setImageResource(R.drawable.default_profile);
+                            // Leave playersImages[0] as null.
+                        }
+                    });
+                }
+
+                if (playerpfp[1] != null) {
+                    StorageReference player2img = sRef.child(playerpfp[1]);
+                    player2img.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            Bitmap temp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 //                currentAvatar.setImageBitmap(temp);
-                        playerImages[1] = temp;
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors, fall back to default pfp.
-                        currentAvatar.setImageBitmap(defaultAvatar);
-                        playerImages[1] = defaultAvatar;
-                    }
-                });
+                            playerImages[1] = temp;
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Do nothing, leave playersImages[1] as null.
+                        }
+                    });
+                }
             }
         });
 
@@ -164,12 +167,19 @@ public class boardOnlineLogic {
                     playerPos newPos = dataSnapshot.getValue(playerPos.class);
                     if(serveRole.equals("host")){
                         gameboard[newPos.row][newPos.col] = 1;
-                        currentAvatar.setImageBitmap(playerImages[1]);
                         currentPlayer.setText("(guest) "+playerNames[1] + "'s Turn");
-                    }else{
+                        if(playerImages[1]==null) // handle no pfp.
+                            currentAvatar.setImageResource(R.drawable.default_profile);
+                        else
+                            currentAvatar.setImageBitmap(playerImages[1]);
+                    }
+                    else{
                         gameboard[newPos.row][newPos.col] = 2;
-                        currentAvatar.setImageBitmap(playerImages[0]);
                         currentPlayer.setText("(host) "+playerNames[0] + "'s Turn");
+                        if(playerImages[0]==null) // handle no pfp.
+                            currentAvatar.setImageResource(R.drawable.default_profile);
+                        else
+                            currentAvatar.setImageBitmap(playerImages[0]);
                     }
                 }
                 // else do nothing since it runs on start..
