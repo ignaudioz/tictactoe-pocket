@@ -80,24 +80,20 @@ public class Room extends AppCompatActivity {
         });
 
         leavebtn.setOnClickListener(view -> {
-            new AlertDialog.Builder(Room.this)
+            new AlertDialog.Builder(this)
                     .setTitle("Exit prompt")
                             .setMessage("Are you sure you wanna leave? ;(")
                             .setCancelable(true)
 
-                            .setPositiveButton("exit", (dialogInterface, i) -> {
+                            .setPositiveButton("leave", (dialogInterface, i) -> {
                                 if(!currentPlayer.equals(roomName))
                                     onlineGameboard.leavegame("player2");
                                 else
                                     onlineGameboard.leavegame("player1");
 
-                                if(playerturn.getText().toString().contains("Won!!"))
-                                    endGame();
-                                else
-                                    Room.this.finish();
-
+                                endGame();
                             })
-                            .setNegativeButton("cancel", (dialogInterface, i)->{})//Do nothing.
+                            .setNegativeButton("cancel", (dialogInterface, i)->{}) //Do nothing.
                     .show();
                 });
 
@@ -105,7 +101,7 @@ public class Room extends AppCompatActivity {
 
         if(!currentPlayer.equals(roomName)) {
             // Setting up alert dialog in-case the host leaves.
-            ad = new AlertDialog.Builder(Room.this)
+            ad = new AlertDialog.Builder(this)
                     .setTitle("Player left!")
                     .setMessage("The host ("+roomName+") left the game.")
                     .setPositiveButton("ok", (dialogInterface, i) -> {
@@ -114,7 +110,7 @@ public class Room extends AppCompatActivity {
 
             role = "guest";
             String[] names = {roomName,currentPlayer};
-            Toast.makeText(Room.this,"Connected!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Connected!",Toast.LENGTH_SHORT).show();
             // Calling game-setup to involve Visual objects from root activity/this activity.
             onlineGameboard.setUpGame(backbutton,playerturn,pfpImageView,names,role,ad);
         }else

@@ -51,7 +51,7 @@
             android:backgroundTint="#6272A4"
             android:drawableStart="@drawable/ic_baseline_supervisor_account_24"
             android:fontFamily="@font/arimo"
-            android:text="Local" />
+            android:text="local game" />
 
         <Button
             android:id="@+id/multibtn"

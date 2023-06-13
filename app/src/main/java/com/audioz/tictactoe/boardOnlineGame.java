@@ -1,6 +1,7 @@
 package com.audioz.tictactoe;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -58,6 +59,7 @@ public class boardOnlineGame extends View{
         } finally {
             a.recycle();
         }
+
         // Creating logic class / adding game logic to the board.
         game = new boardOnlineLogic();
     }
@@ -222,10 +224,18 @@ public class boardOnlineGame extends View{
         mPlayers.addValueEventListener(lPlayers = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-               if(snapshot.getChildrenCount()<=1){
-                   game.removeAllListeners();
-                   ad.show();
+                if(!snapshot.exists()){
+                    game.removeAllListeners();
+                    mPlayers.removeEventListener(this);
+                    mPos.removeEventListener(lPos);
+                }
+                else if(snapshot.getChildrenCount()<=1){
+                    ad.show();
+                    game.removeAllListeners();
+                    mPlayers.removeEventListener(this);
+                    mPos.removeEventListener(lPos);
                }
+
             }
 
             @Override
