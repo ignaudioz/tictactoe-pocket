@@ -1,12 +1,10 @@
 package com.audioz.tictactoe;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
@@ -120,7 +118,6 @@ public class boardOnlineGame extends View{
                     if (game.getPlayer().equals("host")) {
                         game.setPlayer("guest");
                     }
-
                     //if previous player was 'O' a/k/a '2' switch the turn to 'X' player a/k/a '1'.
                     else {
                         game.setPlayer("host");

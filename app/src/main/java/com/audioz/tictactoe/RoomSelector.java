@@ -83,8 +83,8 @@ public class RoomSelector extends AppCompatActivity {
         setupRoom.setOnClickListener(view -> {
             pg.setTitle("Creating room");
             pg.setMessage("Creating your room");
+            pg.setCancelable(false);
             pg.show();
-            setupRoom.setEnabled(false);
             roomName = username;
             mRoom = dataBase.getReference("Rooms/"+roomName+"/players/player1"); // Adding under Rooms an object that is named player1 because we are the host.
             createRoomEventListener();
@@ -100,8 +100,6 @@ public class RoomSelector extends AppCompatActivity {
                 if (roomName.contains("FULL")) {
                     Toast.makeText(RoomSelector.this, "The room is full.", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Avoding crash.
-                    roomName.replace(" - FULL","");
                     mRoom = dataBase.getReference("Rooms/" + roomName + "/players/player2");
 
                     pg.setTitle("Joining room");
@@ -121,7 +119,6 @@ public class RoomSelector extends AppCompatActivity {
        mRoom.addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(@NonNull DataSnapshot snapshot) {
-               setupRoom.setEnabled(true);
                pg.cancel();
                Intent i = new Intent(RoomSelector.this,Room.class);
                i.putExtra("roomName",roomName);
@@ -131,7 +128,7 @@ public class RoomSelector extends AppCompatActivity {
 
            @Override
            public void onCancelled(@NonNull DatabaseError error) {
-               setupRoom.setEnabled(true);
+               pg.cancel();
                Toast.makeText(RoomSelector.this,"Error!: "+error.toString(),Toast.LENGTH_SHORT).show();
            }
        });

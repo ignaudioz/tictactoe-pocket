@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 
 public class login extends AppCompatActivity {
     //TextView
@@ -41,6 +42,14 @@ public class login extends AppCompatActivity {
         // * Getting our authentication instance.
         mAuth = FirebaseAuth.getInstance();
 
+        if(mAuth.getCurrentUser() != null) { // if user uid isn't null, which means he is logged in. bring him to da next page ;~
+            Toast.makeText(login.this, "You have logged-in successfully!", Toast.LENGTH_SHORT)
+                    .show();
+            Intent i = new Intent(login.this, RoomSelector.class);
+            startActivity(i);
+            finish();
+        }
+
         // TextViews
         status = findViewById(R.id.status);
         // EditTexts
@@ -54,13 +63,6 @@ public class login extends AppCompatActivity {
             finish();
         });
 
-        if(mAuth.getCurrentUser() != null) { // if user uid isn't null, which means he is logged in. bring him to da next page ;~
-            Toast.makeText(login.this, "You have logged-in successfully!", Toast.LENGTH_SHORT)
-                    .show();
-            Intent i = new Intent(login.this, RoomSelector.class);
-            startActivity(i);
-            finish();
-        }
 
 
         status.setOnClickListener(view -> {
@@ -108,8 +110,21 @@ public class login extends AppCompatActivity {
                         startActivity(i);
                         finish();
                     }else{
-                        email.setError("E-mail can be wrong!");
-                        password.setError("Password can be wrong!");
+                        String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                        switch (errorCode){
+                            case "ERROR_USER_NOT_FOUND":
+                                Toast.makeText(login.this, "There is no user record corresponding to this identifier. The user may have been deleted.", Toast.LENGTH_LONG).show();
+                                break;
+                            case "ERROR_WRONG_PASSWORD":
+                                Toast.makeText(login.this, "The password is invalid or the user does not have a password.", Toast.LENGTH_LONG).show();
+                                password.setError("password is incorrect ");
+                                password.requestFocus();
+                                password.setText("");
+                                break;
+                            default:
+                                Toast.makeText(login.this,errorCode, Toast.LENGTH_LONG).show();
+                        }
+                        email.setError("");
                     }
                 }
             });

@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +34,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -191,8 +194,8 @@ public class register extends AppCompatActivity {
                 username.setError("Username is required!");
                 error = true;
             }
-            if (name.contains(" ") || name.contains(".")) {
-                username.setError("Spaces or dots are not allowed!");
+            if (name.contains(" ") || name.contains(".") || name.contains("\\") ) {
+                username.setError("Spaces or dots or slashes are not allowed!");
                 error = true;
             }
             if (TextUtils.isEmpty(mail) || !Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
@@ -203,8 +206,9 @@ public class register extends AppCompatActivity {
                 password.setError("Password is required!");
                 error = true;
             }
+
             if (name.length()<3 || name.length()>8) {
-                username.setError("Password length should be greater than 5!");
+                username.setError("Username length should be greater than 5!");
                 error = true;
             }
             if (pass.length()<5) {
@@ -273,7 +277,17 @@ public class register extends AppCompatActivity {
                                 }
                             }else // (!task.isSuccessful())
                             {
-                                email.setError("E-mail is already used!");
+                                String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                                switch (errorCode){
+                                    case "ERROR_EMAIL_ALREADY_IN_USE":
+                                        Toast.makeText(register.this, "The email address is already in use by another account. ", Toast.LENGTH_LONG).show();
+                                        email.setError("The email address is already in use by another account.");
+                                        email.requestFocus();
+                                        break;
+                                    default:
+                                        Toast.makeText(register.this,errorCode, Toast.LENGTH_LONG).show();
+                                }
+
                                pg.dismiss();
                                 Toast.makeText(register.this, "Register Failed! Contact author for support.",Toast.LENGTH_SHORT)
                                         .show();

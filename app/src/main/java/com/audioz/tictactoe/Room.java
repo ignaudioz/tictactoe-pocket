@@ -82,20 +82,20 @@ public class Room extends AppCompatActivity {
         leavebtn.setOnClickListener(view -> {
             new AlertDialog.Builder(this)
                     .setTitle("Exit prompt")
-                            .setMessage("Are you sure you wanna leave? ;(")
-                            .setCancelable(true)
+                    .setMessage("Are you sure you wanna leave? ;(")
+                    .setCancelable(true)
 
-                            .setPositiveButton("leave", (dialogInterface, i) -> {
-                                if(!currentPlayer.equals(roomName))
-                                    onlineGameboard.leavegame("player2");
-                                else
-                                    onlineGameboard.leavegame("player1");
+                    .setPositiveButton("leave", (dialogInterface, i) -> {
+                        if(!currentPlayer.equals(roomName))
+                            onlineGameboard.leavegame("player2");
+                        else
+                            onlineGameboard.leavegame("player1");
 
-                                endGame();
-                            })
-                            .setNegativeButton("cancel", (dialogInterface, i)->{}) //Do nothing.
+                        endGame();
+                    })
+                    .setNegativeButton("cancel", (dialogInterface, i)->{}) //Do nothing.
                     .show();
-                });
+        });
 
 
 
@@ -112,9 +112,18 @@ public class Room extends AppCompatActivity {
             String[] names = {roomName,currentPlayer};
             Toast.makeText(this,"Connected!",Toast.LENGTH_SHORT).show();
             // Calling game-setup to involve Visual objects from root activity/this activity.
-            onlineGameboard.setUpGame(backbutton,playerturn,pfpImageView,names,role,ad);
+            onlineGameboard.setUpGame(backbutton,playerturn,pfpImageView
+                    ,names,role,ad);
         }else
         {
+            // Setting up alert-dialog in-case the guest leaves.
+            ad = new AlertDialog.Builder(Room.this)
+                    .setTitle("Player left!")
+                    .setMessage("The guest ("+guest+") left the game.")
+                    .setPositiveButton("ok", (dialogInterface, i) -> {
+                        endGame();
+                    });
+
             // Setting up progress dialog.
             pg = new ProgressDialog(this);
             pg.setTitle("Wait");
@@ -140,7 +149,8 @@ public class Room extends AppCompatActivity {
                         pg.cancel();
                         Toast.makeText(Room.this,"Found a match!",Toast.LENGTH_SHORT).show();
                         // Calling game-setup to involve Visual objects from root activity/this activity.
-                        onlineGameboard.setUpGame(backbutton,playerturn,pfpImageView,names,role,ad);
+                        onlineGameboard.setUpGame(backbutton,playerturn,pfpImageView,
+                                names,role,ad);
                         mRoom.removeEventListener(this);
                     }
                     // else do nothing since it's reacting to player1 node.
@@ -150,14 +160,6 @@ public class Room extends AppCompatActivity {
                     Toast.makeText(Room.this,"Error:"+error.toString(),Toast.LENGTH_LONG).show();
                 }
             });
-
-            // Setting up alert-dialog in-case the guest leaves.
-            ad = new AlertDialog.Builder(Room.this)
-                    .setTitle("Player left!")
-                    .setMessage("The guest ("+guest+") left the game.")
-                    .setPositiveButton("ok", (dialogInterface, i) -> {
-                        endGame();
-                    });
         }
     }
 

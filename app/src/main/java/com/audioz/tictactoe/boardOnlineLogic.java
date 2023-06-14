@@ -109,16 +109,9 @@ public class boardOnlineLogic {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                Iterable<DataSnapshot> players = snapshot.getChildren();
-                for(DataSnapshot i : players){
-                    for(DataSnapshot j: i.getChildren())
-                        Log.d(i.getKey(), "data: "+j.getValue(String.class));
-                }
-
                 playerpfp = new String[]{snapshot.child("player1/pfp").getValue(String.class),
                         snapshot.child("player2/pfp").getValue(String.class)};
                 final long ONE_MEGABYTE = 1024 * 1024;
-
 
                 // Getting images only once since it won't change.
                 // Host avatar.
@@ -213,6 +206,7 @@ public class boardOnlineLogic {
         });
 
         // is there a winner listener.
+        mWinner.setValue("none");
         mWinner.addValueEventListener(lWinner = new ValueEventListener() {
 
             @Override
@@ -225,7 +219,6 @@ public class boardOnlineLogic {
                 // Do nothing ig :/
             }
         });
-        mWinner.setValue("none");
 
         // Current player/role listener.
         mPlayer.addValueEventListener(lPlayer=new ValueEventListener() {
@@ -306,11 +299,9 @@ public class boardOnlineLogic {
         }
         if(winner) {
             String currPlayer = serveRole;
-            boolean first = true;
-            if( !(winnerName.equals("")) ){
+            if( !(winnerName.equals("")) )
                currPlayer= winnerName;
-               first = false;
-            }
+
 
             backbtn.setVisibility(View.VISIBLE);
             if (currPlayer.equals("guest")) {
@@ -327,7 +318,7 @@ public class boardOnlineLogic {
                 else
                     currentAvatar.setImageBitmap(playerImages[0]);
             }
-            if(first)
+            if(winnerName.equals(""))
                 mWinner.setValue(serveRole);
         }
         return winner;
