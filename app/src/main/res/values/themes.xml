@@ -3,7 +3,7 @@
     <style name="Theme.Tictactoe" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#88C0D0</item>
-        <item name="colorOnPrimary">#202020</item>
+        <item name="colorOnPrimary">#121212</item>
 
         <item name="colorButtonNormal">#81a1c1</item>
 
@@ -12,7 +12,7 @@
         <item name="colorSecondaryVariant">#828383</item>
         <item name="colorOnSecondary">#C13939</item>
         <!-- Customize your theme here. -->
-        <item name="android:textColorPrimary">#444444</item>
+        <item name="android:textColorPrimary">#272727</item>
         <item name="android:textColorSecondary">#585858</item>
         <item name="android:windowBackground">#D8DEE9</item>
     </style>

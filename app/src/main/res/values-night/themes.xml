@@ -3,7 +3,7 @@
     <style name="Theme.Tictactoe" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#50FA7B</item>
-        <item name="colorOnPrimary">#f8f8f2</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
 
         <item name="colorOnBackground">#1c1c1c</item>
 

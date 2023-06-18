@@ -68,7 +68,6 @@ public class login extends AppCompatActivity {
         status.setOnClickListener(view -> {
             Intent i = new Intent(this,register.class);
             startActivity(i);
-            finish();
         });
 
         loginbtn.setOnClickListener(view ->{
