@@ -283,11 +283,11 @@ public class boardOnlineGame extends View{
 
         // This function draws an Oval a/k/a the 'O' using Left,Right,Top and Bottom positions that are given.
         canvas.drawOval(
-                (float) (col*cellSize + fixpos),// Starts 'Left' position at the start of the selected cell added with "fixpos" to make the 'O' fit right (horizontally wise).
-                (float) (row*cellSize + fixpos),// Starts 'Top' position at the selected cell added with "fixpos" to make the 'O' fit right (vertically wise).
-                (float) ((col+1)*cellSize - fixpos),// Ends 'Right' position at the right start of the next cell and fixing its position by subtracting "fixpos" from it ( to fix it horizontally wise).
-                (float) ((row+1)*cellSize - fixpos),// Ends 'Bottom' position at the top start of the next cell(the under-cell) and fixing its position by subtracting "fixpos" from it ( to fix it vertically wise).
-                paint);// using our selected paint.
+                (float) (col*cellSize + fixpos),// Starts 'Left'
+                (float) (row*cellSize + fixpos),// Starts 'Top'
+                (float) ((col+1)*cellSize - fixpos),// Ends 'Right'
+                (float) ((row+1)*cellSize - fixpos),// Ends 'Bottom'
+                paint);
     }
 
     private void drawWinningLine(Canvas canvas){// identifying which kind of winning line is used.
@@ -324,9 +324,9 @@ public class boardOnlineGame extends View{
                 /* Starts 'Y' pos at row place plus fixpos value to
                 avoid drawing on the black line.( drawing the line at the middle of the cell instead of the start(blacklines)*/
                 (float) (row*cellSize + fixpos),
-                (float) (canvas.getWidth()), // Ends 'X' at the end of the board (horizontally wise) aka till 3 cells.
-                (float) (row*cellSize + fixpos), // Ends 'Y' sames as start 'Y', since we want a straight line.
-                paint); // using our selected paint // called in onDraw function.
+                (float) (canvas.getWidth()), // Ends 'X' at the end of the board.
+                (float) (row*cellSize + fixpos), // Ends 'Y' sames as start 'Y'
+                paint);
     }
 
     private void drawVerticalWin(Canvas canvas,int row, int col){ // Draws Vertical Winning line.
@@ -335,13 +335,11 @@ public class boardOnlineGame extends View{
         float fixpos = (float) (cellSize/2);
 
         canvas.drawLine(
-                /* Starts 'X' pos at column place plus fixpos value to
-                avoid drawing on the black line.( drawing the line at the middle of the cell instead of the start(blacklines)*/
-                (float) (col*cellSize + fixpos),
-                (row), // Starts 'Y' pos at row place/Drawing at the top of the cell
-                (float) (col*cellSize + fixpos), // Ends 'X' same as start 'X', since we want a straight line.
-                (float) (canvas.getWidth()), // Ends 'Y' at the end of the board (vertically wise) aka till 3 cells.
-                paint); // using our selected paint // called in onDraw function.
+                (float) (col*cellSize + fixpos), // Starts 'X'.
+                (row), // Starts 'Y'.
+                (float) (col*cellSize + fixpos), // Ends 'X' same as start 'X'.
+                (float) (canvas.getWidth()), // Ends 'Y' at the end of the board.
+                paint);
     }
 
     private void drawDiagonalNegWin(Canvas canvas){ //Draws Negative-Diagonal winning line.
@@ -351,7 +349,7 @@ public class boardOnlineGame extends View{
                 0, // Starts 'Y' at the start/top of the canvas/board.
                 (float) canvas.getWidth(), // Ends 'X' at the end of the canvas/board.
                 (float) canvas.getWidth(), // Ends 'Y' at the bottom of the canvas/board.
-                paint); // using our selected paint // called in onDraw function.
+                paint);
     }
 
     private void drawDiagonalPosWin(Canvas canvas){ // Draws Positive-Diagonal winning line.
