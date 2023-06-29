@@ -103,7 +103,7 @@ public class register extends AppCompatActivity {
 
                         // Converting bitmap to bytes for firebase ;)
                         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                        // Compressing bitmap image to jpg file extension, not degrading quality, out-put to bytes file.
+                        // Compressing bitmap image to bytes using jpg compression.
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
                         imageData = bytes.toByteArray(); // setting image bytes to selected avatar.
 
@@ -116,6 +116,7 @@ public class register extends AppCompatActivity {
                         Intent galleryIntent = result.getData();
                         Uri selectedImage = galleryIntent.getData();
 
+
                         // Converting Uri to bitmap.. smh
                         getContentResolver().notifyChange(selectedImage, null);
                         ContentResolver cr = getContentResolver();
@@ -123,23 +124,28 @@ public class register extends AppCompatActivity {
 
                         try { // converting Uri to bitmap.
                             bitmap = MediaStore.Images.Media
-                                        .getBitmap(cr, selectedImage);
+                                    .getBitmap(cr, selectedImage);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
 
                         // Converting bitmap to bytes for firebase ;)
                         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                        // Compressing bitmap image to jpg file extension, not degrading quality, out-put to bytes file.
+                        // Compressing bitmap image to bytes using jpg compression.
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                        imageData = bytes.toByteArray(); // setting image bytes to selected avatar.
+                        // Checking if image is larger or equal to 2mb.
+                        if (bytes.toByteArray().length / 1024 >= 2048) {
+                            Toast.makeText(register.this, "Image-size is larger than 2mb!!", Toast.LENGTH_SHORT).show();
+                        } else{
+                            imageData = bytes.toByteArray(); // setting image bytes to selected avatar.
+                            pfpbtn.setImageURI(selectedImage);
+                        }
 
-                        pfpbtn.setImageURI(selectedImage);
                         galleryOpen = false;
                         galleryOrCamera.dismiss();
                     }
                 }else{
-                    Toast.makeText(getApplicationContext(), "Upload An image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(register.this, "Upload An image", Toast.LENGTH_SHORT).show();
                 }
             }
         });
