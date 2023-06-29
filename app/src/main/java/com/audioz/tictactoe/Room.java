@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -86,7 +88,7 @@ public class Room extends AppCompatActivity {
                     .setCancelable(true)
 
                     .setPositiveButton("leave", (dialogInterface, i) -> {
-                        if(!currentPlayer.equals(roomName))
+                        if(!roomName.contains(currentPlayer))
                             onlineGameboard.leavegame("player2");
                         else
                             onlineGameboard.leavegame("player1");
@@ -99,7 +101,7 @@ public class Room extends AppCompatActivity {
 
 
 
-        if(!currentPlayer.equals(roomName)) {
+        if(!roomName.contains(currentPlayer)) {
             // Setting up alert dialog in-case the host leaves.
             ad = new AlertDialog.Builder(this)
                     .setTitle("Player left!")
@@ -109,11 +111,16 @@ public class Room extends AppCompatActivity {
                     });
 
             role = "guest";
-            String[] names = {roomName,currentPlayer};
-            Toast.makeText(this,"Connected!",Toast.LENGTH_SHORT).show();
+            String temp;
+            if(roomName.contains("-"))
+                temp = roomName.split("-")[0];
+            else
+                temp = roomName;
+            String[] names = {temp,currentPlayer};
+            Toast.makeText(Room.this,"Connected!",Toast.LENGTH_SHORT).show();
             // Calling game-setup to involve Visual objects from root activity/this activity.
             onlineGameboard.setUpGame(backbutton,playerturn,pfpImageView
-                    ,names,role,ad);
+                    ,names,role,ad,roomName);
         }else
         {
             // Setting up alert-dialog in-case the guest leaves.
@@ -127,7 +134,7 @@ public class Room extends AppCompatActivity {
             // Setting up progress dialog.
             pg = new ProgressDialog(this);
             pg.setTitle("Wait");
-            pg.setMessage("Waiting for an opponent to arrive");
+            pg.setMessage("Waiting for an opponent to arrive.\n Your room name is \""+roomName+"\"");
             pg.setCancelable(false);
             pg.setButton(DialogInterface.BUTTON_NEGATIVE,"Leave?",new DialogInterface.OnClickListener() {
                 @Override
@@ -144,13 +151,13 @@ public class Room extends AppCompatActivity {
                     if(snapshot.hasChild("player2")) {
                         guest = snapshot.child("player2/name").getValue(String.class); // Getting guest's player-name.
                         // Settings player turns name so it won't be blank.
-                        String[] names = {roomName, guest};
+                        String[] names = {currentPlayer, guest};
 
                         pg.cancel();
                         Toast.makeText(Room.this,"Found a match!",Toast.LENGTH_SHORT).show();
                         // Calling game-setup to involve Visual objects from root activity/this activity.
                         onlineGameboard.setUpGame(backbutton,playerturn,pfpImageView,
-                                names,role,ad);
+                                names,role,ad,roomName);
                         mRoom.removeEventListener(this);
                     }
                     // else do nothing since it's reacting to player1 node.

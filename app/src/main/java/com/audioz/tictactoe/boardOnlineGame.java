@@ -189,13 +189,11 @@ public class boardOnlineGame extends View{
 
     }
 
-    public void setUpGame(Button backbtn, TextView currentPlayer, ImageView currentAvatar, String[] playerNames, String role, AlertDialog.Builder ad){
+    public void setUpGame(Button backbtn, TextView currentPlayer, ImageView currentAvatar, String[] playerNames, String role, AlertDialog.Builder ad,String roomName){
         dataBase = FirebaseDatabase.getInstance("https://tic-tac-toe-pocket-default-rtdb.europe-west1.firebasedatabase.app/");
 
-        game.setUpGame(backbtn, currentPlayer, currentAvatar,playerNames, role,dataBase);
+        game.setUpGame(backbtn, currentPlayer, currentAvatar,playerNames, role,dataBase,roomName);
 
-        // CAN'T SAVE TWO DIMINSONAL ARRAY :(((((((((((((((
-        String roomName = playerNames[0];
         // all this work around for this shit thing :(((
         mPos = dataBase.getReference("Rooms/"+roomName+"/Board/pos");
         // Active players in room listener.

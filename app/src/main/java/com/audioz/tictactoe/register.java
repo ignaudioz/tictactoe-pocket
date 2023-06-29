@@ -192,8 +192,8 @@ public class register extends AppCompatActivity {
                 username.setError("Username is required!");
                 error = true;
             }
-            if (name.contains(" ") || name.contains(".") || name.contains("\\") ) {
-                username.setError("Spaces or dots or slashes are not allowed!");
+            if (name.contains(" ") || name.contains(".") || name.contains("\\") || name.contains("-")) {
+                username.setError("Special characters are not allowed!");
                 error = true;
             }
             if (TextUtils.isEmpty(mail) || !Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {

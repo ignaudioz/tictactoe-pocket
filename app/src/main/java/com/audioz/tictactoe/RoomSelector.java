@@ -27,7 +27,7 @@ import java.util.List;
 
 public class RoomSelector extends AppCompatActivity {
     // textView
-    TextView activeRoomtxtview;
+    TextView activeRoomtxtview,nameText;
     // Buttons
     private Button setupRoom;
     // ListView
@@ -60,6 +60,8 @@ public class RoomSelector extends AppCompatActivity {
         pfp = String.valueOf(mAuth.getCurrentUser().getPhotoUrl());
         // TextView
         activeRoomtxtview = findViewById(R.id.activeRoomtxtview);
+        nameText = findViewById(R.id.nameText);
+        nameText.append(username);
         // Button.
         setupRoom = findViewById(R.id.setupRoom);
         Button logoutbtn = findViewById(R.id.logoutbtn);
@@ -85,7 +87,13 @@ public class RoomSelector extends AppCompatActivity {
             pg.setMessage("Creating your room");
             pg.setCancelable(false);
             pg.show();
-            roomName = username;
+
+            if(roomList.contains(username)){
+                String uid= mAuth.getCurrentUser().getUid();
+                uid=uid.substring(0,3);
+                roomName = String.format("%s-%s",username,uid);
+            }else roomName = username;
+
             mRoom = dataBase.getReference("Rooms/"+roomName+"/players/player1"); // Adding under Rooms an object that is named player1 because we are the host.
             createRoomEventListener();
             mRoom.child("name").setValue(username); // setting player1's value to username for convenient.

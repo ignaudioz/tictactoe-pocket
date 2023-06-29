@@ -76,7 +76,7 @@ public class boardOnlineLogic {
         return false;
     }
 
-    public void setUpGame(Button backbtn, TextView currentPlayer, ImageView currentAvatar, String[] names, String role, FirebaseDatabase inst){
+    public void setUpGame(Button backbtn, TextView currentPlayer, ImageView currentAvatar, String[] names, String role, FirebaseDatabase inst,String roomName){
         this.backbtn = backbtn;
         this.currentPlayer = currentPlayer;
         this.currentAvatar = currentAvatar;
@@ -87,7 +87,6 @@ public class boardOnlineLogic {
 
         // CAN'T SAVE TWO DIMINSONAL ARRAY :(((((((((((((((
         // all this work around for this shit thing :(((
-        String roomName = playerNames[0];
 
         FirebaseStorage storage = FirebaseStorage.getInstance("gs://tic-tac-toe-pocket.appspot.com"); // getting Storage instance. specifying instance just in-case..
         sRef = storage.getReference(); // Storage reference to get/uplaod images.
